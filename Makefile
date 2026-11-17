@@ -1,7 +1,7 @@
 # Convenience targets. Every target is also written out as plain commands in README.md.
 
 NS3_IMAGE ?= sky-ns3:3.42
-PY_IMAGE  ?= sky-py:1.0
+PY_IMAGE  ?= sky-py:1.1
 PYTHON    ?= python3
 
 .PHONY: images ns3-image py-image venv lab run nix-lab nix-run check
@@ -36,7 +36,7 @@ nix-run:                              ## execute the whole notebook in the Nix e
 ## Before submitting -------------------------------------------------------
 
 check:                                ## fresh clone of the last commit, then run the notebook
-	rm -rf .check && git clone -q . .check
+	rm -rf .check && git clone -q --recurse-submodules . .check
 	@if [ -f flake.lock ] && command -v nix >/dev/null && [ "$(TRACK)" = nixnet ]; then \
 	  cd .check && $(MAKE) -s nix-run; \
 	else \
