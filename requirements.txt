@@ -8,3 +8,4 @@ matplotlib==3.10.7
 
 # Same versions as the simulation image, so ENGINE=local debugging behaves the same
 -r docker/requirements-sim.txt
+pytest==8.4.2
