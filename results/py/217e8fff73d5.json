@@ -1,0 +1,17 @@
+{
+  "kind": "py",
+  "script": "swarmraft_sim.py",
+  "params": {
+    "n": 5,
+    "f": 2,
+    "apply_noise": true,
+    "tol": 0.01,
+    "runs": 1000
+  },
+  "seed": 43,
+  "engine": "docker",
+  "code": "d7ef051bb85466a0",
+  "image": "sha256:5ca73b4a7f9ad019d912c5e53dbb4614c142751a4a234981b07ba2b210663b6c",
+  "runtime_s": 21.75,
+  "finished_utc": "2026-11-17T19:32:32Z"
+}
