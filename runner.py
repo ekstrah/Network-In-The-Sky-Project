@@ -38,7 +38,7 @@ RESULTS = ROOT / "results"
 
 ENGINE = os.environ.get("ENGINE", "docker")  # "docker" | "local"
 NS3_IMAGE = os.environ.get("NS3_IMAGE", "sky-ns3:3.42")
-PY_IMAGE = os.environ.get("PY_IMAGE", "sky-py:1.0")
+PY_IMAGE = os.environ.get("PY_IMAGE", "sky-py:1.1")
 NS3_LOCAL_DIR = Path(os.environ.get("NS3_DIR", "~/ns-3.42")).expanduser()  # ENGINE=local only
 TIMEOUT_S = int(os.environ.get("JOB_TIMEOUT_S", 6 * 3600))
 

@@ -2,7 +2,26 @@
 
 Based on the [Networks in the Sky experiment template](https://github.com/paulomilheiromendes/networks-in-the-sky) by Paulo Milheiro Mendes, imported from commit `0f842a754bcb5bbbd3affa500f661c916428776d`.
 
-This repository currently contains the original example experiments. Follow the setup below, then adapt the notebook and simulations for your project.
+## SwarmRaft reproduction
+
+We reproduce *SwarmRaft: Leveraging Consensus for Robust Drone Swarm Coordination in GNSS-Degraded Environments* (Dev et al., arXiv:2508.00622). The authors' code ([kapeldev/SwarmRaft](https://github.com/kapeldev/SwarmRaft), commit `6e9d47d`) is included unchanged as a git submodule in `sim/swarmraft`, so clone with submodules:
+
+```bash
+git clone --recurse-submodules <this repository>     # or, in an existing clone: git submodule update --init
+docker build -t sky-py:1.1 -f docker/py.Dockerfile .   # make py-image
+TRACKS=python .venv/bin/jupyter lab                    # skips the template's ns-3 and NixNet examples
+```
+
+| Path | What it is |
+|---|---|
+| `sim/swarmraft/` | the authors' code (submodule, not modified) |
+| `sim/swarmraft_sim.py` | wrapper with the template's `--params/--seed/--out` contract |
+| `sim/swarmraft_variants.py` | our optional changes: keep the noisy ranges, change the vote tolerance |
+| `tests/` | checks that the wrapper reproduces the authors' numbers (`.venv/bin/python -m pytest tests -q`) |
+
+Run time of notebook sections 3 and 4 from an empty `results/`: about 7 minutes (Apple M1, 8 cores, Docker Desktop). Afterwards every job is cached.
+
+The ns-3 and NixNet sections of the notebook are still the template's examples.
 
 Template for the TUM master seminar *Networks in the Sky*. You reproduce (and extend) the results of a paper and report everything in one Jupyter notebook that anyone can re-run.
 
@@ -40,7 +59,7 @@ Requirements: Docker (Docker Desktop on macOS/Windows), Python 3.11-3.13, Git. `
 ```bash
 # 1. Build the simulation images once (ns-3: 20-40 min the first time)
 docker build -t sky-ns3:3.42 -f docker/ns3.Dockerfile .      # make ns3-image
-docker build -t sky-py:1.0   -f docker/py.Dockerfile .       # make py-image
+docker build -t sky-py:1.1   -f docker/py.Dockerfile .       # make py-image
 
 # 2. Jupyter environment on your machine
 python3 -m venv .venv                                        # make venv

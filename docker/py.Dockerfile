@@ -1,5 +1,5 @@
 # Python simulation image (Docker track). Build from the repository root:
-#   docker build -t sky-py:1.0 -f docker/py.Dockerfile .       (or: make images)
+#   docker build -t sky-py:1.1 -f docker/py.Dockerfile .       (or: make images)
 #
 # Only the packages are baked in. Your code in sim/ is mounted read-only at
 # /code when the notebook runs a job, so editing it needs no rebuild.

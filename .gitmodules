@@ -1,0 +1,4 @@
+[submodule "sim/swarmraft"]
+	path = sim/swarmraft
+	url = https://github.com/kapeldev/SwarmRaft.git
+	ignore = untracked
