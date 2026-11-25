@@ -8,6 +8,9 @@ behaves exactly like the authors' SwarmVerification class:
                      distance (Scaling_Swarm_Error.py, line 70). True keeps the
                      noisy distance, using the same random draws in the same order.
   tol=0.01           the pairwise vote tolerance tau in metres (authors' default).
+  gnss_noise=0       GNSS noise std per axis in metres, added to every drone's
+                     reported position (honest and spoofed). Drawn from its own
+                     generator, so the authors' random draws stay unchanged.
 """
 
 import sys
@@ -24,10 +27,18 @@ AUTHORS_TOL_M = 0.01
 class SwarmVariant(SwarmVerification):
     """The authors' verifier with switchable range noise and vote tolerance."""
 
-    def __init__(self, n_drones, seed, distance_noise_std, apply_noise=False, tol=AUTHORS_TOL_M):
+    def __init__(self, n_drones, seed, distance_noise_std, apply_noise=False, tol=AUTHORS_TOL_M, gnss_noise=0.0):
         super().__init__(n_drones=n_drones, seed=seed, distance_noise_std=distance_noise_std)
         self.apply_noise = apply_noise
         self.tol = tol
+        self.gnss_noise = gnss_noise
+        self.gnss_rng = np.random.default_rng(seed)
+
+    def generate_swarm(self, *args, **kwargs):
+        out = super().generate_swarm(*args, **kwargs)
+        if self.gnss_noise:
+            self.reported_positions += self.gnss_rng.normal(0, self.gnss_noise, size=self.reported_positions.shape)
+        return out
 
     def generate_distance_matrix(self):
         if not self.apply_noise:

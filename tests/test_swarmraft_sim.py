@@ -49,6 +49,22 @@ def test_apply_noise_stores_noisy_ranges_with_same_geometry():
     assert 0.3 < diff[~np.eye(6, dtype=bool)].std() < 0.8
 
 
+def test_gnss_noise_moves_every_report_and_nothing_else():
+    def build(gnss_noise):
+        swarm = SwarmVariant(9, seed=3, distance_noise_std=0.5, gnss_noise=gnss_noise)
+        swarm.generate_swarm(num_faulty=4)
+        swarm.generate_distance_matrix()
+        return swarm
+
+    plain, noisy = build(0.0), build(1.0)
+    np.testing.assert_array_equal(plain.true_positions, noisy.true_positions)
+    np.testing.assert_array_equal(plain.faulty_indices, noisy.faulty_indices)
+    np.testing.assert_array_equal(plain.distance_matrix, noisy.distance_matrix)
+    diff = noisy.reported_positions - plain.reported_positions
+    assert (diff != 0).all()  # every drone, every axis
+    assert 0.6 < diff.std() < 1.4
+
+
 def test_tolerance_is_passed_to_the_vote():
     rows = simulate(parse_params({"n": 9, "f": 4, "runs": 30, "apply_noise": True}), seed=5)
     rows_tol = simulate(parse_params({"n": 9, "f": 4, "runs": 30, "apply_noise": True, "tol": 2.0}), seed=5)

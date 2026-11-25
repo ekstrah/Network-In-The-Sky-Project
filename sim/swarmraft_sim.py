@@ -9,6 +9,7 @@ Parameters (JSON):
   noise        range noise std in metres, as passed to the authors' code (default 0.5)
   apply_noise  keep the noisy ranges instead of the true ones (default false = authors)
   tol          pairwise vote tolerance in metres (default 0.01 = authors)
+  gnss_noise   GNSS noise std per axis in metres on every reported position (default 0 = authors)
   mode         "montecarlo" (default): one row per run
                "scenario": one row per drone of a single run (for Fig. 1)
 
@@ -24,7 +25,8 @@ import pandas as pd
 
 from swarmraft_variants import AUTHORS_TOL_M, SwarmVariant
 
-DEFAULTS = {"runs": 1000, "noise": 0.5, "apply_noise": False, "tol": AUTHORS_TOL_M, "mode": "montecarlo"}
+DEFAULTS = {"runs": 1000, "noise": 0.5, "apply_noise": False, "tol": AUTHORS_TOL_M, "gnss_noise": 0.0,
+            "mode": "montecarlo"}
 FLOAT_FORMAT = "%.6g"
 
 
@@ -75,7 +77,7 @@ def scenario_rows(result: dict) -> list[dict]:
 
 def simulate(p: dict, seed: int) -> list[dict]:
     swarm = SwarmVariant(n_drones=p["n"], seed=seed, distance_noise_std=p["noise"],
-                         apply_noise=p["apply_noise"], tol=p["tol"])
+                         apply_noise=p["apply_noise"], tol=p["tol"], gnss_noise=p["gnss_noise"])
     if p["mode"] == "scenario":
         return scenario_rows(swarm.run_full_verification(num_faulty=p["f"]))
     return [run_row(swarm.run_full_verification(num_faulty=p["f"]), k) for k in range(p["runs"])]

@@ -8,3 +8,6 @@ result-*
 
 # Unfinished jobs (complete results in results/ ARE committed)
 results/**/*.partial.csv
+
+# Paper PDFs (get them from arXiv)
+papers/
